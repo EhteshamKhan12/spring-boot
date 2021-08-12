@@ -1,34 +1,48 @@
 package com.example.demo.student;
 
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * Created by Win10 on 8/8/2021.
  */
+@Entity
+@Table
 public class Student {
+    @Id
+    @SequenceGenerator(
+            name ="student_sequence",
+            sequenceName = "student_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "student_sequence"
+    )
+
     private Long id;
     private String name;
     private String email;
-    private Integer age;
-    private LocalDate date;
+    private LocalDate dob;
 
+    @Transient
+    private Integer age;
     public Student() {
 
     }
 
-    public Student(Long id, String name, String email, Integer age, LocalDate date) {
+    public Student(Long id, String name, String email,  LocalDate dob) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.age = age;
-        this.date = date;
+        this.dob = dob;
     }
 
-    public Student(String name, String email, Integer age, LocalDate date) {
+    public Student(String name, String email,   LocalDate dob) {
         this.name = name;
         this.email = email;
-        this.age = age;
-        this.date = date;
+        this.dob = dob;
     }
 
     public Long getId() {
@@ -56,7 +70,7 @@ public class Student {
     }
 
     public Integer getAge() {
-        return age;
+        return Period.between(this.dob,LocalDate.now()).getYears();
     }
 
     public void setAge(Integer age) {
@@ -64,11 +78,11 @@ public class Student {
     }
 
     public LocalDate getDate() {
-        return date;
+        return dob;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDate(LocalDate dob) {
+        this.dob = dob;
     }
 
     @Override
@@ -78,7 +92,7 @@ public class Student {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
-                ", date=" + date +
+                ", date=" + dob +
                 '}';
     }
 }
